@@ -1,0 +1,13 @@
+RewriteEngine On
+
+# dynamically setup base URI
+RewriteCond %{REQUEST_URI}::$1 ^(/.+)/(.*)::\2$
+RewriteRule ^(.*) - [E=BASE_URI:%1]
+
+# redirect every request to index.php
+# and give the relative URL in "page" GET param
+
+#  Avec ce bloc, si jamais on demande à Apache une page ou un dossier qui n'existe pas, il va nous rediriger vers le fichier index.php en mettant le nom de la page demandée en paramètre GET page.
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^(.*)$ index.php?page=/$1 [QSA,L]
